@@ -1,3 +1,8 @@
+<img width="1920" height="1080" alt="Screenshot 2026-03-11 140437" src="https://github.com/user-attachments/assets/7f54f7f7-0e5f-469c-94e6-02601a995aae" />
+
+
+
+
 Below are **concise Java Collections Framework syntax revision notes** tailored for **DSA interviews (SDE-2 level)**.
 Focus is on **syntax + commonly used methods + patterns used in coding interviews**.
 
@@ -407,3 +412,462 @@ Deque<Integer> dq = new ArrayDeque<>();
 5. `TreeMap` for **range queries**
 6. `LinkedHashMap` for **LRU cache**
 
+
+
+
+
+
+
+
+Below is a **concise SDE-2 Java Collections Interview Q&A sheet**.
+Each answer is **structured for interviews**: *definition → key points → complexity/extra notes*.
+
+---
+
+# Java Collections Framework – Top Interview Q&A (SDE-2)
+
+---
+
+# 1. What is the Java Collections Framework?
+
+**Answer**
+
+Java Collections Framework (JCF) is a **set of interfaces, implementations, and algorithms** used to store and manipulate groups of objects.
+
+**Components**
+
+1. **Interfaces**
+
+   * List
+   * Set
+   * Queue
+   * Map
+
+2. **Implementations**
+
+   * ArrayList
+   * HashSet
+   * HashMap
+   * TreeMap
+   * PriorityQueue
+
+3. **Algorithms**
+
+   * Sorting
+   * Searching
+   * Shuffling
+
+4. **Iterators**
+
+   * Traverse collections
+
+---
+
+# 2. Difference between Collection and Collections
+
+| Feature | Collection                  | Collections                     |
+| ------- | --------------------------- | ------------------------------- |
+| Type    | Interface                   | Utility class                   |
+| Package | java.util                   | java.util                       |
+| Purpose | Represents group of objects | Utility methods for collections |
+| Example | List, Set                   | sort(), reverse(), min()        |
+
+**Example**
+
+```java
+Collections.sort(list);
+Collections.reverse(list);
+```
+
+---
+
+# 3. Why is Map not part of Collection?
+
+**Answer**
+
+Map is separate because it stores **key-value pairs**, while Collection stores **only elements**.
+
+**Key Difference**
+
+```
+Collection → [value]
+Map → [key → value]
+```
+
+---
+
+# 4. What is the difference between Iterable and Iterator?
+
+| Feature | Iterable             | Iterator          |
+| ------- | -------------------- | ----------------- |
+| Purpose | Enables foreach loop | Iterates elements |
+| Method  | iterator()           | hasNext(), next() |
+
+**Example**
+
+```java
+Iterator<Integer> it = list.iterator();
+
+while(it.hasNext()){
+    System.out.println(it.next());
+}
+```
+
+---
+
+# 5. Difference between ArrayList and LinkedList
+
+| Feature              | ArrayList     | LinkedList         |
+| -------------------- | ------------- | ------------------ |
+| Structure            | Dynamic array | Doubly linked list |
+| Random access        | O(1)          | O(n)               |
+| Insert/delete middle | O(n)          | O(1)               |
+| Memory               | Less          | More               |
+
+**Use case**
+
+```
+ArrayList → read-heavy
+LinkedList → insert/delete-heavy
+```
+
+---
+
+# 6. Why is ArrayDeque preferred over Stack?
+
+**Answer**
+
+Stack extends **Vector**, which is **synchronized and slower**.
+
+ArrayDeque advantages:
+
+* Not synchronized
+* Faster operations
+* Better memory locality
+
+**Example**
+
+```java
+Deque<Integer> stack = new ArrayDeque<>();
+
+stack.push(10);
+stack.pop();
+```
+
+---
+
+# 7. How does ArrayList grow internally?
+
+**Answer**
+
+When capacity is exceeded:
+
+```
+new capacity = old + (old / 2)
+```
+
+**Process**
+
+1. Create new array
+2. Copy elements
+3. Replace old array
+
+---
+
+# 8. What are Fail-Fast and Fail-Safe iterators?
+
+### Fail-Fast
+
+* Throws `ConcurrentModificationException`
+* Detects structural modification
+
+Examples
+
+```
+ArrayList
+HashMap
+HashSet
+```
+
+### Fail-Safe
+
+* Works on a **copy**
+* No exception
+
+Examples
+
+```
+CopyOnWriteArrayList
+ConcurrentHashMap
+```
+
+---
+
+# 9. Difference between HashSet, LinkedHashSet, TreeSet
+
+| Feature    | HashSet | LinkedHashSet         | TreeSet        |
+| ---------- | ------- | --------------------- | -------------- |
+| Order      | None    | Insertion order       | Sorted         |
+| Structure  | HashMap | HashMap + linked list | Red-Black tree |
+| Complexity | O(1)    | O(1)                  | O(log n)       |
+
+---
+
+# 10. Why does HashSet not allow duplicates?
+
+**Answer**
+
+HashSet internally uses **HashMap**.
+
+When inserting:
+
+1. Compute `hashCode()`
+2. Check bucket
+3. Use `equals()` to verify duplicate
+
+If duplicate found → insertion ignored.
+
+---
+
+# 11. What happens if equals() is overridden but hashCode() is not?
+
+**Answer**
+
+Hash-based collections break.
+
+**Reason**
+
+Objects may be equal but stored in **different hash buckets**.
+
+Result:
+
+```
+HashSet may contain duplicates
+HashMap lookups may fail
+```
+
+---
+
+# 12. Difference between HashMap and TreeMap
+
+| Feature    | HashMap    | TreeMap        |
+| ---------- | ---------- | -------------- |
+| Order      | None       | Sorted         |
+| Structure  | Hash table | Red-Black tree |
+| Complexity | O(1)       | O(log n)       |
+| Null keys  | Allowed    | Not allowed    |
+
+---
+
+# 13. Difference between HashMap and Hashtable
+
+| Feature        | HashMap | Hashtable   |
+| -------------- | ------- | ----------- |
+| Thread-safe    | No      | Yes         |
+| Performance    | Faster  | Slower      |
+| Null key/value | Allowed | Not allowed |
+| Legacy         | No      | Yes         |
+
+---
+
+# 14. Why is HashMap not thread safe?
+
+**Answer**
+
+Multiple threads can modify buckets simultaneously.
+
+Possible issues:
+
+* Lost updates
+* Data inconsistency
+* Infinite loops during resizing (Java 7)
+
+Solution:
+
+```
+ConcurrentHashMap
+Collections.synchronizedMap()
+```
+
+---
+
+# 15. Internal structure of HashMap (Java 8)
+
+**Structure**
+
+```
+Array of buckets
+       ↓
+Linked List
+       ↓
+Red-Black Tree (if collisions > 8)
+```
+
+---
+
+# 16. What is Treeification in HashMap?
+
+When bucket size exceeds **8**, the linked list becomes a **Red-Black Tree**.
+
+Benefits:
+
+```
+Search improves
+O(n) → O(log n)
+```
+
+---
+
+# 17. What is Load Factor?
+
+**Definition**
+
+Load factor determines **when resizing happens**.
+
+Default:
+
+```
+0.75
+```
+
+Resize condition:
+
+```
+size > capacity × load factor
+```
+
+---
+
+# 18. Difference between put() and putIfAbsent()
+
+### put()
+
+```
+Always inserts
+Overwrites existing value
+```
+
+### putIfAbsent()
+
+```
+Only inserts if key is absent
+```
+
+---
+
+# 19. How does PriorityQueue work internally?
+
+**Answer**
+
+PriorityQueue is implemented using a **binary heap**.
+
+Properties:
+
+* Min heap by default
+* Stored in array
+
+Complexities
+
+```
+insert → O(log n)
+remove → O(log n)
+peek → O(1)
+```
+
+---
+
+# 20. Why does PriorityQueue print unsorted elements?
+
+Heap property guarantees:
+
+```
+Root is min/max
+```
+
+But rest of elements **are not sorted**.
+
+---
+
+# 21. What is ConcurrentHashMap?
+
+Thread-safe alternative to HashMap.
+
+Java 8 features:
+
+* CAS operations
+* synchronized buckets
+* high concurrency
+
+---
+
+# 22. Difference between synchronizedMap and ConcurrentHashMap
+
+| Feature     | synchronizedMap | ConcurrentHashMap |
+| ----------- | --------------- | ----------------- |
+| Locking     | Entire map      | Segment level     |
+| Concurrency | Low             | High              |
+| Performance | Slower          | Faster            |
+
+---
+
+# 23. What is CopyOnWriteArrayList?
+
+Thread-safe list.
+
+Mechanism:
+
+```
+Write → copy entire array
+Read → no lock
+```
+
+Use case:
+
+```
+Read-heavy applications
+```
+
+---
+
+# 24. Difference between Comparable and Comparator
+
+| Feature  | Comparable   | Comparator     |
+| -------- | ------------ | -------------- |
+| Location | Inside class | External       |
+| Method   | compareTo()  | compare()      |
+| Sorting  | Single rule  | Multiple rules |
+
+---
+
+# 25. How does Collections.sort() work internally?
+
+Java uses **TimSort**.
+
+TimSort is a hybrid of:
+
+```
+Merge Sort
+Insertion Sort
+```
+
+Complexity:
+
+```
+O(n log n)
+```
+
+---
+
+# Quick Revision (Most Important Topics)
+
+For **SDE-2 interviews focus on explaining internals of:**
+
+```
+HashMap
+ConcurrentHashMap
+ArrayList resizing
+PriorityQueue heap
+TreeMap red-black tree
+```
+
+---
