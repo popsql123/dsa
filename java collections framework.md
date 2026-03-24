@@ -17,7 +17,7 @@ Focus is on **syntax + commonly used methods + patterns used in coding interview
 **Use when:** fast random access, dynamic array
 
 ```java
-List<Integer> list = new ArrayList<>();
+List<Integer> list = new ArrayList<Integer>();
 
 // Add
 list.add(10);
